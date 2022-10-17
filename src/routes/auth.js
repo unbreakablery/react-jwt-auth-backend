@@ -51,7 +51,7 @@ api.post("/signup", async (req, res) => {
   }
 });
 
-api.get("/login", async (req, res) => {
+api.get("/signin", async (req, res) => {
   try {
     const { email, password } = req.query;
     if (!email || !password)  {
@@ -96,5 +96,20 @@ api.get("/login", async (req, res) => {
     });
   }
 });
+
+api.get("/", async (req, res) => {
+    try {
+      const db = await database.getDb();
+      const resultSet = await db.collection.find({}).toArray();
+
+      return res.send(resultSet);
+    } catch (err) {
+      console.log("err", err);
+      return res.status(500).send({
+        message: "server error",
+      });
+    }
+  }
+);
 
 module.exports = api;
